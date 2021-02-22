@@ -1,4 +1,4 @@
-# ETC Explorer
+# DAE Explorer
 
 <img src="public/img/explorer-logo.png" alt="ETC Explorer logo" height="200" />
 
