@@ -28,7 +28,7 @@ const Block = new Schema(
 
 const Account = new Schema(
   {
-    'address': { type: String, index: { unique: true } },
+    'address': { type: String, index: { unique: true }, lowercase: true },
     'balance': Number,
     'blockNumber': Number,
     'type': { type: Number, default: 0 }, // address: 0x0, contract: 0x1
@@ -37,7 +37,7 @@ const Account = new Schema(
 
 const Contract = new Schema(
   {
-    'address': { type: String, index: { unique: true } },
+    'address': { type: String, index: { unique: true }, lowercase: true },
     'blockNumber': Number,
     'ERC': { type: Number, index: true }, //0:normal contract, 2:ERC20, 3:ERC223
     'creationTransaction': String,

@@ -277,7 +277,7 @@ const writeTransactionsToDB = async (config, blockData, flush) => {
       asyncL.eachSeries(accounts, (account, eachCallback) => {
         const { blockNumber } = data[account];
         // get contract account type
-        web3.eth.getCode(account, (err, code) => {
+        web3.eth.getCode(account.toLowerCase(), (err, code) => {
           if (err) {
             console.log(`ERROR: fail to getCode(${account})`);
             return eachCallback(err);
@@ -309,7 +309,7 @@ const writeTransactionsToDB = async (config, blockData, flush) => {
             }
           }
           // upsert account
-          Account.collection.update({ address: account }, { $set: data[account] }, { upsert: true });
+          Account.collection.update({ address: account.toLowerCase() }, { $set: data[account] }, { upsert: true });
         });
       });
     }
