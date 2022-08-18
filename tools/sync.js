@@ -143,7 +143,7 @@ const writeTransactionsToDB = async (config, blockData, flush) => {
     self.miners = [];
   }
   if (blockData) {
-    self.miners.push({ address: blockData.miner, blockNumber: blockData.number, type: 0 });
+    self.miners.push({ address: blockData.miner.toLowerCase(), blockNumber: blockData.number, type: 0 });
   }
   if (blockData && blockData.transactions.length > 0) {
     for (d in blockData.transactions) {

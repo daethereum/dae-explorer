@@ -266,7 +266,7 @@ function makeParityRichList(number, offset, blockNumber, updateCallback) {
             return eachCallback(err);
           }
           data[account] = {};
-          data[account].address = account;
+          data[account].address = account.toLowerCase();
           if (code.length > 2) {
             // 0: normal address, 1: contract
             data[account].type = 1; //contract case
