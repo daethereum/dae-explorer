@@ -112,7 +112,7 @@ var getAccounts = function (req, res) {
           return;
         }
 
-        data.data = accounts.map((account, i) => [i + 1 + start, account.address, account.type, account.balance, account.blockNumber]);
+        data.data = accounts.map((account, i) => [i + 1 + start, account.address.toLowerCase(), account.type, account.balance, account.blockNumber]);
         res.write(JSON.stringify(data));
         res.end();
       });
