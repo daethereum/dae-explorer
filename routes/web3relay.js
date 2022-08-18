@@ -64,9 +64,12 @@ const checkActive = () => {
     web3.setProvider(newProvider())
   }
 }
+if (typeof window !== 'undefined') {
+  setInterval(checkActive, 2000)
+  window.addEventListener('focus', checkActive)
+}
 
-setInterval(checkActive, 2000)
-window.addEventListener('focus', checkActive)
+
 if (web3.eth.net.isListening()) console.log('Web3 connection established');
 else throw 'No connection, please specify web3host in conf.json';
 
