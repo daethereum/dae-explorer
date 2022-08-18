@@ -57,7 +57,7 @@ const newProvider = () => new Web3.providers.WebsocketProvider(`ws://${config.no
   },
 })
 
-const web3 = new Web3(newProvider())
+web3 = new Web3(newProvider())
 
 const checkActive = () => {
   if (!web3.currentProvider.connected) {
