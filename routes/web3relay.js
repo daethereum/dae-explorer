@@ -46,8 +46,27 @@ try {
 //Create Web3 connection
 console.log(`Connecting ${config.nodeAddr}:${config.wsPort}...`);
 
-web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://${config.nodeAddr}:${config.wsPort}`));
+//web3 = new Web3(new Web3.providers.WebsocketProvider());
 
+const newProvider = () => new Web3.providers.WebsocketProvider(`ws://${config.nodeAddr}:${config.wsPort}`, {
+  reconnect: {
+    auto: true,
+    delay: 2000, // ms
+    maxAttempts: 5,
+    onTimeout: false,
+  },
+})
+
+const web3 = new Web3(newProvider())
+
+const checkActive = () => {
+  if (!web3.currentProvider.connected) {
+    web3.setProvider(newProvider())
+  }
+}
+
+setInterval(checkActive, 2000)
+window.addEventListener('focus', checkActive)
 if (web3.eth.net.isListening()) console.log('Web3 connection established');
 else throw 'No connection, please specify web3host in conf.json';
 
