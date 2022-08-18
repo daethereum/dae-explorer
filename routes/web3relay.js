@@ -267,8 +267,19 @@ exports.data = async (req, res) => {
       if (err || !doc) {
         web3.eth.getBlock(blockNumOrHash, (err, block) => {
           if (err || !block) {
-            console.error(`BlockWeb3 error :${err}`);
-            res.write(JSON.stringify({ 'error': true }));
+            if (!web3.currentProvider.connected) {
+              web3.setProvider(newProvider())
+            }
+            web3.eth.getBlock(blockNumOrHash, (err, block) => {
+              if (err || !block) {
+
+                console.error(`BlockWeb3 error :${err}`);
+                res.write(JSON.stringify({ 'error': true }));
+              } else {
+                res.write(JSON.stringify(filterBlocks(block)));
+              }
+              res.end();
+            });
           } else {
             res.write(JSON.stringify(filterBlocks(block)));
           }
@@ -321,9 +332,37 @@ exports.data = async (req, res) => {
     if (req.body.action == 'hashrate') {
       web3.eth.getBlock('latest', (err, latest) => {
         if (err || !latest) {
-          console.error(`StatsWeb3 error :${err}`);
-          res.write(JSON.stringify({ 'error': true }));
-          res.end();
+          if (!web3.currentProvider.connected) {
+             web3.setProvider(newProvider())
+          }
+          web3.eth.getBlock('latest', (err, latest) => {
+            if (err || !latest) {
+              console.error(`StatsWeb3 error :${err}`);
+              res.write(JSON.stringify({ 'error': true }));
+              res.end();
+            } else {
+              console.log(`StatsWeb3: latest block 2: ${latest.number}`);
+              let checknum = latest.number - 100;
+              if (checknum < 0) checknum = 0;
+              const nblock = latest.number - checknum;
+              web3.eth.getBlock(checknum, (err, block) => {
+                if (err || !block) {
+                  console.error(`StatsWeb3 error 2 :${err}`);
+                  res.write(JSON.stringify({
+                    'blockHeight': latest.number, 'difficulty': latest.difficulty, 'blockTime': 0, 'hashrate': 0,
+                  }));
+                } else {
+                  console.log(`StatsWeb3: check block 2: ${block.number}`);
+                  const blocktime = (latest.timestamp - block.timestamp) / nblock;
+                  const hashrate = latest.difficulty / blocktime;
+                  res.write(JSON.stringify({
+                    'blockHeight': latest.number, 'difficulty': latest.difficulty, 'blockTime': blocktime, 'hashrate': hashrate,
+                  }));
+                }
+                res.end();
+              });
+            }
+          });
         } else {
           console.log(`StatsWeb3: latest block: ${latest.number}`);
           let checknum = latest.number - 100;
