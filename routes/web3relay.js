@@ -89,7 +89,9 @@ exports.data = async (req, res) => {
 
   if ('tx' in req.body) {
     var txHash = req.body.tx.toLowerCase();
-
+    if (!web3.currentProvider.connected) {
+      web3.setProvider(newProvider())
+    }
     Transaction.findOne({ hash: txHash }).lean(true).exec(async (err, doc) => {
       if (err || !doc) {
         web3.eth.getTransaction(txHash, (err, tx) => {
@@ -265,6 +267,9 @@ exports.data = async (req, res) => {
     Block.findOne({ $or: [{ hash: blockNumOrHash }, { number: blockNumOrHash }] },
       { '_id': 0 }).lean(true).exec('findOne', (err, doc) => {
       if (err || !doc) {
+        if (!web3.currentProvider.connected) {
+          web3.setProvider(newProvider())
+        }
         web3.eth.getBlock(blockNumOrHash, (err, block) => {
           if (err || !block) {
             if (!web3.currentProvider.connected) {
