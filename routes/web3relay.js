@@ -272,19 +272,12 @@ exports.data = async (req, res) => {
         }
         web3.eth.getBlock(blockNumOrHash, (err, block) => {
           if (err || !block) {
-            if (!web3.currentProvider.connected) {
-              web3.setProvider(newProvider())
-            }
-            web3.eth.getBlock(blockNumOrHash, (err, block) => {
-              if (err || !block) {
 
                 console.error(`BlockWeb3 error :${err}`);
                 res.write(JSON.stringify({ 'error': true }));
-              } else {
-                res.write(JSON.stringify(filterBlocks(block)));
-              }
-              res.end();
-            });
+
+
+
           } else {
             res.write(JSON.stringify(filterBlocks(block)));
           }
