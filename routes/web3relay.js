@@ -160,8 +160,10 @@ exports.data = async (req, res) => {
         txResponse.valueUSD = txResponse.value * latestPrice.quoteUSD;
       }
 
-      res.write(JSON.stringify(txResponse));
-      res.end();
+      if(txResponse!=null) {
+        res.write(JSON.stringify(txResponse));
+        res.end();
+      }
     });
   } else if ('tx_send' in req.body) {
     let rawTx = req.body.tx_send.toLowerCase();
