@@ -57,7 +57,7 @@ Basic settings:
         "logo": "/img/explorer-logo.png",
         "copyright": "2019 &copy; Ethereum Classic.",
         "poweredbyCustom": false,
-        "poweredbyEtcImage": "/img/powered-by-etcexplorer-w.png",
+        "poweredbyEtcImage": "/img/explorer-logo.png",
         "poweredbyEtc": true,
         "useRichList": true,
         "useFiat": true,
